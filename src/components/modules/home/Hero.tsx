@@ -12,7 +12,7 @@ import doctorImage2 from '../../../assets/images/Doctor2.jpg'
 
 const Hero = () => {
   return (
-    <div className="absolute inset-0 z-0"
+    <div className="relative z-0 min-h-screen"
           style={{ background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #0071DF 100%)", }}>
       <section className="relative container px-4 mx-auto">
 
