@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { BsFacebook, BsInstagram, BsLinkedin, BsTwitterX } from 'react-icons/bs'
 export function PublicFooter() {
     return (
-        <footer className="bg-slate-50 border-t border-border pt-16 pb-8 mt-14">
+        <footer className="bg-slate-100 pt-16 pb-8 mt-14">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                     {/* Brand */}

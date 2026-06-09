@@ -3,49 +3,46 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useState } from 'react'
+import { loginUser } from '@/services/auth/loginUser'
+import { useActionState, useState } from 'react'
 
 const LoginForm = () => {
 
     const [isLoading, setIsLoading] = useState(false)
 
-    return (
-        <form className="space-y-8">
-            <div className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                    {/* <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                            id="name"
-                            placeholder="John Doe"
-                            required
-                        />
-                    </div> */}
-                </div>
+    const [state, formAction, isPending] = useActionState(loginUser, null)
+    console.log(state, "state")
 
+    return (
+
+        <form action={formAction}
+            className="space-y-8">
+            <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
                     <Input
                         id="email"
                         type="email"
+                        name="email"
                         placeholder="name@example.com"
                         required
                     />
                 </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
+                <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="••••••••"
+                        required
+                    />
+                </div>
             </div>
 
-            <Button type="submit" className="w-full h-11 text-base" disabled={isLoading}>
-                 {isLoading ? 'Signing in...' : 'Sign In'}
+            <Button type="submit" className="w-full h-11 text-base" disabled={isPending}>
+                {isPending ? 'Signing in...' : 'Sign In'}
             </Button>
         </form>
     )
