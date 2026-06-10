@@ -1,12 +1,39 @@
 "use server"
 
+import { getDefaultDashboardRoute, isValidateRedirectForRole, UserRole } from "@/lib/auth-utils"
+import { parse } from "cookie"
+import jwt, { JwtPayload } from "jsonwebtoken"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
+import z from "zod"
+
+const loginValidationSchema = z.object({
+    email: z.email({ error: "Invalid email address" }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters long" })
+
+})
+
 export const loginUser = async (currentState: any, formData: any): Promise<any> => {
     try {
+
+        const redirectTo = formData.get('redirect') || null;
+
+        let accessTokenObj: null | any = null
+        let refreshTokenObj: null | any = null
+
         const loginData = {
             email: formData.get("email"),
             password: formData.get("password")
         }
 
+        const validationResult = loginValidationSchema.safeParse(loginData)
+        if (!validationResult.success) {
+            return {
+                success: false, errors: validationResult.error.issues.map(issue => {
+                    return { field: issue.path[0], message: issue.message }
+                })
+            }
+        }
 
         const res = await fetch("http://localhost:5000/api/v1/auth/login", {
             method: "POST",
@@ -14,14 +41,80 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
             headers: {
                 "Content-Type": "application/json"
             }
-        }).then(res => res.json())
+        })
 
 
-        return res
+        const setCookieHeaders = res.headers.getSetCookie()
+
+        if (setCookieHeaders && setCookieHeaders.length > 0) {
+            setCookieHeaders.forEach((cookie: string) => {
+                const parsedCookie = parse(cookie)
+
+                if (parsedCookie['accessToken']) {
+                    accessTokenObj = parsedCookie;
+                }
+                if (parsedCookie['refreshToken']) {
+                    refreshTokenObj = parsedCookie;
+                }
+            })
+        }
+        else {
+            throw new Error("No Set-Cookie header found in response")
+        }
 
 
-    } catch (error) {
-        console.error("Error logging in user:", error)
+
+        if (!accessTokenObj) {
+            throw new Error("Tokens not found in cookies")
+        }
+        if (!refreshTokenObj) {
+            throw new Error("Tokens not found in cookies")
+        }
+
+        const cookieStore = await cookies()
+
+        cookieStore.set('accessToken', accessTokenObj.accessToken, {
+            secure: true,
+            httpOnly: true,
+            maxAge: parseInt(accessTokenObj['Max-Age']) || 100 * 60 * 60,
+            path: accessTokenObj.Path || "/",
+            sameSite: accessTokenObj.SameSite || 'none'
+        })
+
+        cookieStore.set("refreshToken", refreshTokenObj.refreshToken, {
+            secure: true,
+            httpOnly: true,
+            maxAge: parseInt(refreshTokenObj['Max-Age']) || 100 * 60 * 60 * 24 * 90,
+            path: refreshTokenObj.Path || "/",
+            sameSite: accessTokenObj.SameSite || "none"
+        })
+
+
+
+        const verifiedToken: JwtPayload | string = jwt.verify(accessTokenObj.accessToken, process.env.JWT_ACCESS_SECRET as string);
+
+        if (typeof verifiedToken === "string") {
+            throw new Error("Invalid token")
+        }
+
+        const userRole: UserRole = verifiedToken.role
+
+
+        if (redirectTo) {
+            const requestPath = redirectTo.toString()
+            if (isValidateRedirectForRole(requestPath, userRole)) {
+               redirect(requestPath)
+            }else{
+                redirect(getDefaultDashboardRoute(userRole))
+            }
+        }
+
+
+
+    } catch (error: any) {
+        if (error?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw error
+        }
         return { success: false, error: "Login failed" }
     }
 }

@@ -4,19 +4,26 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { loginUser } from '@/services/auth/loginUser'
-import { useActionState, useState } from 'react'
+import { useActionState } from 'react'
 
-const LoginForm = () => {
-
-    const [isLoading, setIsLoading] = useState(false)
+const LoginForm = ({ redirect }: { redirect?: string }) => {
 
     const [state, formAction, isPending] = useActionState(loginUser, null)
-    console.log(state, "state")
+
+    const getFieldError = (fieldName: string) => {
+        if (state && state.errors) {
+            const errorForField = state.errors.find((err: any) => err.field === fieldName)
+            return errorForField?.message
+        }
+        else {
+            return null
+        }
+    }
 
     return (
 
-        <form action={formAction}
-            className="space-y-8">
+        <form action={formAction} className="space-y-8">
+            {redirect && <input type="hidden" name='redirect' value={redirect} />}
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
@@ -25,8 +32,8 @@ const LoginForm = () => {
                         type="email"
                         name="email"
                         placeholder="name@example.com"
-                        required
                     />
+                    {getFieldError("email") && <p className="text-sm text-red-500">{getFieldError("email")}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -36,9 +43,9 @@ const LoginForm = () => {
                         type="password"
                         name="password"
                         placeholder="••••••••"
-                        required
                     />
                 </div>
+                {getFieldError("password") && <p className="text-sm text-red-500">{getFieldError("password")}</p>}
             </div>
 
             <Button type="submit" className="w-full h-11 text-base" disabled={isPending}>
