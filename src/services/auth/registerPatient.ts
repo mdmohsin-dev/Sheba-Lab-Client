@@ -1,6 +1,7 @@
 "use server"
 
 import z from "zod"
+import { loginUser } from "./loginUser"
 
 const registerValidationSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
@@ -27,9 +28,12 @@ export const registerPatient = async (currentState: any, formData: any): Promise
             address: registerData.patient.address
         })
         if (!validationResult.success) {
-            return { success: false, errors: validationResult.error.issues.map(issue => {
-                return { field: issue.path[0], message: issue.message }
-            }) }}
+            return {
+                success: false, errors: validationResult.error.issues.map(issue => {
+                    return { field: issue.path[0], message: issue.message }
+                })
+            }
+        }
 
         const newFormData = new FormData()
         newFormData.append("data", JSON.stringify(registerData))
@@ -37,15 +41,20 @@ export const registerPatient = async (currentState: any, formData: any): Promise
         const res = await fetch("http://localhost:5000/api/v1/user/create-patient", {
             method: "POST",
             body: newFormData,
-        }).then(res => res.json())
+        })
+        const result = await res.json()
 
-        console.log(res, 'res')
+        if (result.success) {
+            loginUser(currentState, formData)
+        }
 
-        return res
+        return result
 
 
-    } catch (error) {
-        console.error("Error registering patient:", error)
+    } catch (error: any) {
+        if (error?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw error
+        }
         return { success: false, error: "Registration failed" }
     }
 }

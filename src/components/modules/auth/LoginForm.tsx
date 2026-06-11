@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { loginUser } from '@/services/auth/loginUser'
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
+import { Loader } from 'lucide-react'
+import { toast } from 'sonner'
 
 const LoginForm = ({ redirect }: { redirect?: string }) => {
 
@@ -19,6 +21,12 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
             return null
         }
     }
+
+    useEffect(() => {
+        if (state && !state.success && state.message) {
+            toast.error(state.message)
+        }
+    }, [state])
 
     return (
 
@@ -49,7 +57,11 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
             </div>
 
             <Button type="submit" className="w-full h-11 text-base" disabled={isPending}>
-                {isPending ? 'Signing in...' : 'Sign In'}
+                {isPending ? (
+                    <Loader className="animate-spin" />
+                ) : (
+                    'Sign In'
+                )}
             </Button>
         </form>
     )

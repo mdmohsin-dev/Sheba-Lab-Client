@@ -3,9 +3,9 @@
 import { getDefaultDashboardRoute, isValidateRedirectForRole, UserRole } from "@/lib/auth-utils"
 import { parse } from "cookie"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import z from "zod"
+import { setCookie } from "./tokenHandlers"
 
 const loginValidationSchema = z.object({
     email: z.email({ error: "Invalid email address" }),
@@ -43,6 +43,7 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
             }
         })
 
+        const result = await res.json()
 
         const setCookieHeaders = res.headers.getSetCookie()
 
@@ -71,9 +72,8 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
             throw new Error("Tokens not found in cookies")
         }
 
-        const cookieStore = await cookies()
 
-        cookieStore.set('accessToken', accessTokenObj.accessToken, {
+        await setCookie('accessToken', accessTokenObj.accessToken, {
             secure: true,
             httpOnly: true,
             maxAge: parseInt(accessTokenObj['Max-Age']) || 100 * 60 * 60,
@@ -81,7 +81,7 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
             sameSite: accessTokenObj.SameSite || 'none'
         })
 
-        cookieStore.set("refreshToken", refreshTokenObj.refreshToken, {
+        await setCookie("refreshToken", refreshTokenObj.refreshToken, {
             secure: true,
             httpOnly: true,
             maxAge: parseInt(refreshTokenObj['Max-Age']) || 100 * 60 * 60 * 24 * 90,
@@ -99,14 +99,19 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
 
         const userRole: UserRole = verifiedToken.role
 
+        if (!result.success) {
+            throw new Error(result.message||'Invalid email or password')
+        }
 
         if (redirectTo) {
             const requestPath = redirectTo.toString()
             if (isValidateRedirectForRole(requestPath, userRole)) {
-               redirect(requestPath)
-            }else{
+                redirect(requestPath)
+            } else {
                 redirect(getDefaultDashboardRoute(userRole))
             }
+        } else {
+            redirect(getDefaultDashboardRoute(userRole))
         }
 
 
@@ -115,6 +120,6 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
         if (error?.digest?.startsWith('NEXT_REDIRECT')) {
             throw error
         }
-        return { success: false, error: "Login failed" }
+        return { success: false, message: `${process.env.NODE_ENV=== 'development'?error.message:'Invalid email or password'}` }
     }
 }
