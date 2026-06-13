@@ -159,7 +159,7 @@ export function PublicFooter() {
                             <li className="flex items-center gap-3">
                                 <Mail className="h-5 w-5 text-primary shrink-0" />
                                 <span className="text-sm text-muted-foreground">
-                                    support@medicareai.com
+                                    support@shebalab.com
                                 </span>
                             </li>
                         </ul>

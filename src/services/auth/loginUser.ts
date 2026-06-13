@@ -106,12 +106,12 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
         if (redirectTo) {
             const requestPath = redirectTo.toString()
             if (isValidateRedirectForRole(requestPath, userRole)) {
-                redirect(requestPath)
+                redirect(`${requestPath}?loggedIn=true`)
             } else {
-                redirect(getDefaultDashboardRoute(userRole))
+                redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`)
             }
         } else {
-            redirect(getDefaultDashboardRoute(userRole))
+            redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`)
         }
 
 

@@ -1,10 +1,12 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { registerPatient } from '@/services/auth/registerPatient'
+import { toast } from 'sonner'
+import { Loader } from 'lucide-react'
 
 export default function RegisterForm() {
 
@@ -21,28 +23,33 @@ export default function RegisterForm() {
     }
   }
 
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message)
+    }
+  }, [state])
 
   return (
     <form action={formAction}
       className="space-y-8">
       <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              name="name"
-              placeholder="John Doe"
-            />
-          </div>
-          {getFieldError("name") && <p className="text-sm text-red-500">{getFieldError("name")}</p>}
-          <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
-            <Input
-              id="address"
-              name="address"
-              placeholder="123 Main St, City, State 12345"
-            />
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="name">Full Name</Label>
+          <Input
+            id="name"
+            name="name"
+            placeholder="John Doe"
+          />
+        </div>
+        {getFieldError("name") && <p className="text-sm text-red-500">{getFieldError("name")}</p>}
+        <div className="space-y-2">
+          <Label htmlFor="address">Address</Label>
+          <Input
+            id="address"
+            name="address"
+            placeholder="123 Main St, City, State 12345"
+          />
+        </div>
 
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
@@ -55,22 +62,22 @@ export default function RegisterForm() {
           {getFieldError("email") && <p className="text-sm text-red-500">{getFieldError("email")}</p>}
         </div>
 
-       
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-            />
-          </div>
-          {getFieldError("password") && <p className="text-sm text-red-500">{getFieldError("password")}</p>}
-          
+
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+          />
+        </div>
+        {getFieldError("password") && <p className="text-sm text-red-500">{getFieldError("password")}</p>}
+
       </div>
 
       <Button type="submit" className="w-full h-11 text-base" disabled={isPending}>
-        {isPending ? 'Creating account...' : 'Create Account'}
+        {isPending ? <Loader className='animate-spin'/> : 'Create Account'}
       </Button>
     </form>
   )
