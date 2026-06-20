@@ -7,21 +7,12 @@ import { Label } from '@/components/ui/label'
 import { registerPatient } from '@/services/auth/registerPatient'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
+import { getInputFieldError } from '@/lib/getInputFieldError'
+import InputFieldError from '../shared/InputFieldError'
 
 export default function RegisterForm() {
 
   const [state, formAction, isPending] = useActionState(registerPatient, null)
-
-
-  const getFieldError = (fieldName: string) => {
-    if (state && state.errors) {
-      const errorForField = state.errors.find((err: any) => err.field === fieldName)
-      return errorForField?.message
-    }
-    else {
-      return null
-    }
-  }
 
   useEffect(() => {
     if (state && !state.success && state.message) {
@@ -41,9 +32,9 @@ export default function RegisterForm() {
             placeholder="John Doe"
           />
         </div>
-        {getFieldError("name") && <p className="text-sm text-red-500">{getFieldError("name")}</p>}
+        <InputFieldError field="name" state={state} />
         <div className="space-y-2">
-          <Label htmlFor="address">Address</Label>
+          <Label htmlFor="address">Address<span className='text-xs'>(optionla)</span></Label>
           <Input
             id="address"
             name="address"
@@ -59,7 +50,7 @@ export default function RegisterForm() {
             type="email"
             placeholder="name@example.com"
           />
-          {getFieldError("email") && <p className="text-sm text-red-500">{getFieldError("email")}</p>}
+          <InputFieldError field="email" state={state} />
         </div>
 
 
@@ -72,7 +63,7 @@ export default function RegisterForm() {
             placeholder="••••••••"
           />
         </div>
-        {getFieldError("password") && <p className="text-sm text-red-500">{getFieldError("password")}</p>}
+        <InputFieldError field="password" state={state} />
 
       </div>
 

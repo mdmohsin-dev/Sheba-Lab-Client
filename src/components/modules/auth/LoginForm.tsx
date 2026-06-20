@@ -7,20 +7,11 @@ import { loginUser } from '@/services/auth/loginUser'
 import { useActionState, useEffect } from 'react'
 import { Loader } from 'lucide-react'
 import { toast } from 'sonner'
+import InputFieldError from '../shared/InputFieldError'
 
 const LoginForm = ({ redirect }: { redirect?: string }) => {
 
     const [state, formAction, isPending] = useActionState(loginUser, null)
-
-    const getFieldError = (fieldName: string) => {
-        if (state && state.errors) {
-            const errorForField = state.errors.find((err: any) => err.field === fieldName)
-            return errorForField?.message
-        }
-        else {
-            return null
-        }
-    }
 
     useEffect(() => {
         if (state && !state.success && state.message) {
@@ -41,7 +32,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
                         name="email"
                         placeholder="name@example.com"
                     />
-                    {getFieldError("email") && <p className="text-sm text-red-500">{getFieldError("email")}</p>}
+                    <InputFieldError field="email" state={state} />
                 </div>
 
                 <div className="space-y-2">
@@ -53,7 +44,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
                         placeholder="••••••••"
                     />
                 </div>
-                {getFieldError("password") && <p className="text-sm text-red-500">{getFieldError("password")}</p>}
+                <InputFieldError field="password" state={state} />
             </div>
 
             <Button type="submit" className="w-full h-11 text-base" disabled={isPending}>

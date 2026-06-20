@@ -6,12 +6,11 @@ import jwt, { JwtPayload } from "jsonwebtoken"
 import { redirect } from "next/navigation"
 import z from "zod"
 import { setCookie } from "./tokenHandlers"
+import { serverFetch } from "@/lib/server-fetch"
+import { zodValidator } from "@/lib/zodValidator"
+import { loginValidationSchema } from "@/zod/auth.validation"
 
-const loginValidationSchema = z.object({
-    email: z.email({ error: "Invalid email address" }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters long" })
 
-})
 
 export const loginUser = async (currentState: any, formData: any): Promise<any> => {
     try {
@@ -21,25 +20,30 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
         let accessTokenObj: null | any = null
         let refreshTokenObj: null | any = null
 
-        const loginData = {
+        const payload = {
             email: formData.get("email"),
             password: formData.get("password")
         }
 
-        const validationResult = loginValidationSchema.safeParse(loginData)
-        if (!validationResult.success) {
-            return {
-                success: false, errors: validationResult.error.issues.map(issue => {
-                    return { field: issue.path[0], message: issue.message }
-                })
-            }
+        // const validationResult = loginValidationSchema.safeParse(loginData)
+        // if (!validationResult.success) {
+        //     return {
+        //         success: false, errors: validationResult.error.issues.map(issue => {
+        //             return { field: issue.path[0], message: issue.message }
+        //         })
+        //     }
+        // }
+
+        if (zodValidator(payload, loginValidationSchema).success === false) {
+            return zodValidator(payload, loginValidationSchema);
         }
 
-        const res = await fetch("http://localhost:5000/api/v1/auth/login", {
-            method: "POST",
-            body: JSON.stringify(loginData),
-            headers: {
-                "Content-Type": "application/json"
+        const validatedPayload = zodValidator(payload, loginValidationSchema).data;
+
+        const res = await serverFetch.post("/auth/login", {
+            body: JSON.stringify(validatedPayload),
+            headers:{
+                "Content-type":"application/json"
             }
         })
 
@@ -100,7 +104,7 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
         const userRole: UserRole = verifiedToken.role
 
         if (!result.success) {
-            throw new Error(result.message||'Invalid email or password')
+            throw new Error(result.message || 'Invalid email or password')
         }
 
         if (redirectTo) {
@@ -120,6 +124,6 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
         if (error?.digest?.startsWith('NEXT_REDIRECT')) {
             throw error
         }
-        return { success: false, message: `${process.env.NODE_ENV=== 'development'?error.message:'Invalid email or password'}` }
+        return { success: false, message: `${process.env.NODE_ENV === 'development' ? error.message : 'Invalid email or password'}` }
     }
 }
