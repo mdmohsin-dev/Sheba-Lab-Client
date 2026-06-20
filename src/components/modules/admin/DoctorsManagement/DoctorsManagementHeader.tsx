@@ -1,12 +1,19 @@
 "use client";
 
+import { ISpecialty } from "@/types/specialities.interface";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import SpecialitiesFormDialog from "./SpecialitiesFormDialog";
+import DoctorFormDialog from "./DoctorFormDialog";
 import ManagementPageHeader from "../../shared/ManagementPageHeader";
 
-const SpecialitiesManagementHeader = () => {
+interface DoctorsManagementHeaderProps {
+  specialities?: ISpecialty[];
+}
+
+const DoctorsManagementHeader = ({
+  specialities,
+}: DoctorsManagementHeaderProps) => {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -18,17 +25,18 @@ const SpecialitiesManagementHeader = () => {
   };
   return (
     <>
-      <SpecialitiesFormDialog
+      <DoctorFormDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onSuccess={handleSuccess}
+        specialities={specialities}
       />
 
       <ManagementPageHeader
-        title="Specialties Management"
-        description="Manage Specialties information and details"
+        title="Doctors Management"
+        description="Manage Doctors information and details"
         action={{
-          label: "Add Specialty",
+          label: "Add Doctor    ",
           icon: Plus,
           onClick: () => setIsDialogOpen(true),
         }}
@@ -37,4 +45,4 @@ const SpecialitiesManagementHeader = () => {
   );
 };
 
-export default SpecialitiesManagementHeader;
+export default DoctorsManagementHeader;

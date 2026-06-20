@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label'
 import { registerPatient } from '@/services/auth/registerPatient'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
-import { getInputFieldError } from '@/lib/getInputFieldError'
 import InputFieldError from '../shared/InputFieldError'
 
 export default function RegisterForm() {
