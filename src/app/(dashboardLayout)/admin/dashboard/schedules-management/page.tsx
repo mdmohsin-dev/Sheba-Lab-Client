@@ -1,8 +1,8 @@
-import SchedulesFilter from "@/components/modules/Admin/SchedulesManagement/SchedulesFilter";
-import SchedulesManagementHeader from "@/components/modules/Admin/SchedulesManagement/SchedulesManagementHeader";
-import SchedulesTable from "@/components/modules/Admin/SchedulesManagement/SchedulesTable";
-import TablePagination from "@/components/shared/TablePagination";
-import { TableSkeleton } from "@/components/shared/TableSkeleton";
+import SchedulesFilter from "@/components/modules/admin/SchedulesManagement/SchedulesFilter";
+import SchedulesManagementHeader from "@/components/modules/admin/SchedulesManagement/SchedulesManagementHeader";
+import SchedulesTable from "@/components/modules/admin/SchedulesManagement/SchedulesTable";
+import TablePagination from "@/components/modules/shared/TablePagination";
+import { TableSkeleton } from "@/components/modules/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getSchedules } from "@/services/admin/schedulesManagement";
 import { Suspense } from "react";

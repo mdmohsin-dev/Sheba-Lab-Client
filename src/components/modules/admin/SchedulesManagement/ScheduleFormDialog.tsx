@@ -1,4 +1,3 @@
-import InputFieldError from "@/components/shared/InputFieldError";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,9 +7,10 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { createSchedule } from "@/services/admin/schedulesManagement";
 import { useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
+import InputFieldError from "../../shared/InputFieldError";
+import { createSchedule } from "@/services/admin/schedulesManagement";
 
 interface IScheduleFormDialogProps {
   open: boolean;

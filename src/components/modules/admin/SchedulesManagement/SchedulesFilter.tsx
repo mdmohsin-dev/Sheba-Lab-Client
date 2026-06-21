@@ -1,11 +1,11 @@
 "use client";
 
-import ClearFiltersButton from "@/components/shared/ClearFiltersButton";
-import RefreshButton from "@/components/shared/RefreshButton";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
+import RefreshButton from "../../shared/RefreshButton";
+import ClearFiltersButton from "../../shared/ClearFiltersButton";
 
 const SchedulesFilter = () => {
   const router = useRouter();
