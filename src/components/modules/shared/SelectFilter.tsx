@@ -13,6 +13,7 @@ interface SelectFilterProps {
   paramName: string; // ?gender=
   placeholder?: string;
   options: { label: string; value: string }[];
+  defaultValue?:string
 }
 
 const SelectFilter = ({
