@@ -1,3 +1,4 @@
+import DoctorFilters from "@/components/modules/admin/DoctorsManagement/DoctorFilters";
 import DoctorsManagementHeader from "@/components/modules/admin/DoctorsManagement/DoctorsManagementHeader";
 import DoctorsTable from "@/components/modules/admin/DoctorsManagement/DoctorsTable";
 import RefreshButton from "@/components/modules/shared/RefreshButton";
@@ -26,7 +27,7 @@ const AdminDoctorsManagementPage = async ({
   return (
     <div className="space-y-6">
       <DoctorsManagementHeader specialities={specialitiesResult.data} />
-      <div className="flex space-x-4">
+      {/* <div className="flex space-x-4">
         <SearchFilter paramName="searchTerm" placeholder="Search doctors..." />
         <SelectFilter
           paramName="speciality" // ?speciality="Cardiology"
@@ -37,7 +38,8 @@ const AdminDoctorsManagementPage = async ({
           placeholder="Filter by speciality"
         />
         <RefreshButton />
-      </div>
+      </div> */}
+      <DoctorFilters specialties={specialitiesResult?.data}></DoctorFilters>
       <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
         <DoctorsTable
           doctors={doctorsResult.data}

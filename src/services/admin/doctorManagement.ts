@@ -110,7 +110,7 @@ export async function updateDoctor(id: string, _prevState: any, formData: FormDa
             appointmentFee: Number(formData.get("appointmentFee") as string),
             qualification: formData.get("qualification") as string,
             currentWorkingPlace: formData.get("currentWorkingPlace") as string,
-            designation: formData.get("designation") as string,
+            // designation: formData.get("designation") as string, InshaAllah backend e fiste e add korte hobe then frontend e eikhane
         }
         const validatedPayload = zodValidator(payload, updateDoctorZodSchema).data;
 
