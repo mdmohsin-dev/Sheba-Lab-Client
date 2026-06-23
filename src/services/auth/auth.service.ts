@@ -52,87 +52,80 @@ export async function updateMyProfile(formData: FormData) {
 }
 
 // Reset Password
-export async function resetPassword(_prevState: any, formData: FormData) {
+// export async function resetPassword(_prevState: any, formData: FormData) {
 
-    const redirectTo = formData.get('redirect') || null;
+//     const redirectTo = formData.get('redirect') || null;
+//     const resetToken = formData.get('token') as string;  // ✅ form থেকে reset token নাও
 
-    // Build validation payload
-    const validationPayload = {
-        newPassword: formData.get("newPassword") as string,
-        confirmPassword: formData.get("confirmPassword") as string,
-    };
+//     const validationPayload = {
+//         newPassword: formData.get("newPassword") as string,
+//         confirmPassword: formData.get("confirmPassword") as string,
+//     };
 
-    // Validate
-    const validatedPayload = zodValidator(validationPayload, resetPasswordSchema);
+//     const validatedPayload = zodValidator(validationPayload, resetPasswordSchema);
 
-    if (!validatedPayload.success && validatedPayload.errors) {
-        return {
-            success: false,
-            message: "Validation failed",
-            formData: validationPayload,
-            errors: validatedPayload.errors,
-        };
-    }
+//     if (!validatedPayload.success && validatedPayload.errors) {
+//         return {
+//             success: false,
+//             message: "Validation failed",
+//             formData: validationPayload,
+//             errors: validatedPayload.errors,
+//         };
+//     }
 
-    try {
+//     try {
+//         // if (!resetToken) {
+//         //     throw new Error("Reset token not found");
+//         // }
 
-        const accessToken = await getCookie("accessToken");
+//         const user = await getUserInfo();
 
-        if (!accessToken) {
-            throw new Error("User not authenticated");
-        }
+//         // const response = await serverFetch.post("/auth/reset-password", {
+//         //     body: JSON.stringify({
+//         //         id: user?.id,
+//         //         password: validationPayload.newPassword,
+//         //     }),
+//         //     headers: {
+//         //         "Authorization": resetToken,  // ✅ reset token পাঠাও
+//         //         "Content-Type": "application/json",
+//         //     },
+//         // });
 
-        const verifiedToken = jwt.verify(accessToken as string, process.env.JWT_SECRET!) as jwt.JwtPayload;
+//         // const result = await response.json();
 
-        const userRole: UserRole = verifiedToken.role;
+//         // if (!result.success) {
+//         //     throw new Error(result.message || "Reset password failed");
+//         // }
 
-        const user = await getUserInfo();
-        // API Call
-        const response = await serverFetch.post("/auth/reset-password", {
-            body: JSON.stringify({
-                id: user?.id,
-                password: validationPayload.newPassword,
-            }),
-            headers: {
-                "Authorization": accessToken,
-                "Content-Type": "application/json",
-            },
-        });
+//         // if (result.success) {
+//         //     revalidateTag("user-info", "max")
+//         // }
 
-        const result = await response.json();
+//         // needPasswordChange false হলে dashboard এ redirect
+//         const accessToken = await getCookie("accessToken");
+//         const verifiedToken = jwt.verify(accessToken as string, process.env.JWT_ACCESS_SECRET!) as jwt.JwtPayload;
+//         const userRole: UserRole = verifiedToken.role;
 
-        if (!result.success) {
-            throw new Error(result.message || "Reset password failed");
-        }
+//         if (redirectTo) {
+//             const requestedPath = redirectTo.toString();
+//             if (isValidateRedirectForRole(requestedPath, userRole)) {
+//                 redirect(`${requestedPath}?loggedIn=true`);
+//             } else {
+//                 redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`);
+//             }
+//         } else {
+//             redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`);
+//         }
 
-        if (result.success) {
-            // await get
-            revalidateTag("user-info", { expire: 0 });
-        }
-
-        if (redirectTo) {
-            const requestedPath = redirectTo.toString();
-            if (isValidateRedirectForRole(requestedPath, userRole)) {
-                redirect(`${requestedPath}?loggedIn=true`);
-            } else {
-                redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`);
-            }
-        } else {
-            redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`);
-        }
-
-    } catch (error: any) {
-        // Re-throw NEXT_REDIRECT errors so Next.js can handle them
-        if (error?.digest?.startsWith("NEXT_REDIRECT")) {
-            throw error;
-        }
-        return {
-            success: false,
-            message: error?.message || "Something went wrong",
-            formData: validationPayload,
-        };
-    }
-}
+//     } catch (error: any) {
+//         if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
+//         return {
+//             success: false,
+//             message: error?.message || "Something went wrong",
+//             formData: validationPayload,
+//         };
+//     }
+// }
 
 export async function getNewAccessToken() {
     try {

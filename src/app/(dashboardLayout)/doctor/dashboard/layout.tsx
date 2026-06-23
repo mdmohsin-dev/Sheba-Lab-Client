@@ -1,7 +1,7 @@
-const DoctorDashboardLayout = () => {
-  return (
-    <div>DoctorDashboardLayout</div>
-  )
-}
+import React from "react";
 
-export default DoctorDashboardLayout
+const DoctorDashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;
+};
+
+export default DoctorDashboardLayout;

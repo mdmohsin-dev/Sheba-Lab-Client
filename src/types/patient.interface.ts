@@ -5,7 +5,7 @@ export interface IPatient {
     profilePhoto?: string | null;
     contactNumber: string;
     address: string;
-    isDeleted: boolean;
+    isdeleted: boolean;
     createdAt: string;
     updatedAt: string;
     patientHealthData?: IPatientHealthData;

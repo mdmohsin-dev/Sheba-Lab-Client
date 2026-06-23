@@ -4,7 +4,7 @@ export interface IAdmin {
     name: string;
     profilePhoto?: string | null;
     contactNumber: string;
-    isDeleted: boolean;
+    isdeleted: boolean;
     createdAt: string;
     updatedAt: string;
 }

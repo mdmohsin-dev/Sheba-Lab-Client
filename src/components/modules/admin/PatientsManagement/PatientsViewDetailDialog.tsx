@@ -66,10 +66,10 @@ const PatientViewDetailDialog = ({
               </p>
               <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                 <Badge
-                  variant={patient?.isDeleted ? "destructive" : "default"}
+                  variant={patient?.isdeleted ? "destructive" : "default"}
                   className="text-sm"
                 >
-                  {patient?.isDeleted ? "Inactive" : "Active"}
+                  {patient?.isdeleted ? "Inactive" : "Active"}
                 </Badge>
               </div>
             </div>

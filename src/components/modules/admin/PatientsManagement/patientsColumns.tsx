@@ -46,7 +46,7 @@ export const patientsColumns: Column<IPatient>[] = [
   },
   {
     header: "Status",
-    accessor: (patient) => <StatusBadgeCell isDeleted={patient.isDeleted} />,
+    accessor: (patient) => <StatusBadgeCell isdeleted={patient.isdeleted} />,
   },
   {
     header: "Joined",

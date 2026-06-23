@@ -4,7 +4,6 @@ import { getDefaultDashboardRoute, isValidateRedirectForRole, UserRole } from "@
 import { parse } from "cookie"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { redirect } from "next/navigation"
-import z from "zod"
 import { setCookie } from "./tokenHandlers"
 import { serverFetch } from "@/lib/server-fetch"
 import { zodValidator } from "@/lib/zodValidator"
@@ -42,8 +41,8 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
 
         const res = await serverFetch.post("/auth/login", {
             body: JSON.stringify(validatedPayload),
-            headers:{
-                "Content-type":"application/json"
+            headers: {
+                "Content-type": "application/json"
             }
         })
 
@@ -106,6 +105,10 @@ export const loginUser = async (currentState: any, formData: any): Promise<any> 
         if (!result.success) {
             throw new Error(result.message || 'Invalid email or password')
         }
+
+        // if (result.data.needPasswordChange) {
+        //     redirect("/reset-password");
+        // }
 
         if (redirectTo) {
             const requestPath = redirectTo.toString()

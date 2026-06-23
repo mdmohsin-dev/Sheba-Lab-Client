@@ -13,7 +13,7 @@ export interface IDoctor {
     currentWorkingPlace: string;
     designation: string;
     profilePhoto?: string;
-    isDeleted?: boolean;
+    isdeleted?: boolean;
     averageRating?: number;
     createdAt?: string;
     updatedAt?: string;

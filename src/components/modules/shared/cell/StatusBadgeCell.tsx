@@ -3,19 +3,19 @@
 import { Badge } from "@/components/ui/badge";
 
 interface StatusBadgeCellProps {
-  isDeleted?: boolean;
+  isdeleted?: boolean;
   activeText?: string;
   deletedText?: string;
 }
 
 export function StatusBadgeCell({
-  isDeleted,
+  isdeleted,
   activeText = "Active",
   deletedText = "Deleted",
 }: StatusBadgeCellProps) {
   return (
-    <Badge variant={isDeleted ? "destructive" : "default"}>
-      {isDeleted ? deletedText : activeText}
+    <Badge variant={isdeleted ? "destructive" : "default"}>
+      {isdeleted ? deletedText : activeText}
     </Badge>
   );
 }

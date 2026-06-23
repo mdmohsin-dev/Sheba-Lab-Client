@@ -51,10 +51,10 @@ const AdminViewDetailDialog = ({
               </p>
               <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                 <Badge
-                  variant={admin?.isDeleted ? "destructive" : "default"}
+                  variant={admin?.isdeleted ? "destructive" : "default"}
                   className="text-sm"
                 >
-                  {admin?.isDeleted ? "Inactive" : "Active"}
+                  {admin?.isdeleted ? "Inactive" : "Active"}
                 </Badge>
                 <Badge variant="secondary" className="text-sm">
                   <Shield className="h-3 w-3 mr-1" />
@@ -121,7 +121,7 @@ const AdminViewDetailDialog = ({
                   <User className="h-4 w-4 mt-1 text-muted-foreground" />
                   <InfoRow
                     label="Account Status"
-                    value={admin?.isDeleted ? "Inactive" : "Active"}
+                    value={admin?.isdeleted ? "Inactive" : "Active"}
                   />
                 </div>
               </div>

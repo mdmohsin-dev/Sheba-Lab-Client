@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { logoutUser } from "@/services/auth/logoutUser"
 import { UserInfo } from "@/types/user.interface"
-import { BadgeCheckIcon, LogOutIcon, Settings, UserRound } from "lucide-react"
+import { LogOutIcon, Settings, UserRound } from "lucide-react"
 import Link from "next/link"
 
 interface UserDropdownProps {

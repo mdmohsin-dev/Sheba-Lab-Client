@@ -61,10 +61,10 @@ const DoctorViewDetailDialog = ({
               </p>
               <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                 <Badge
-                  variant={doctor?.isDeleted ? "destructive" : "default"}
+                  variant={doctor?.isdeleted ? "destructive" : "default"}
                   className="text-sm"
                 >
-                  {doctor?.isDeleted ? "Inactive" : "Active"}
+                  {doctor?.isdeleted ? "Inactive" : "Active"}
                 </Badge>
                 {doctor?.averageRating !== undefined && (
                   <Badge variant="secondary" className="text-sm">

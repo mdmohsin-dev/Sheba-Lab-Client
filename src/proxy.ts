@@ -3,11 +3,30 @@ import { NextRequest } from 'next/server'
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from './lib/auth-utils'
 import { deleteCookie, getCookie } from './services/auth/tokenHandlers'
+import { getUserInfo } from './services/auth/getUserInfo'
+import { getNewAccessToken } from './services/auth/auth.service'
 
 
 export async function proxy(request: NextRequest) {
 
     const pathName = request.nextUrl.pathname
+    const hasTokenRefreshedParam = request.nextUrl.searchParams.has('tokenRefreshed');
+
+       // If coming back after token refresh, remove the param and continue
+    if (hasTokenRefreshedParam) {
+        const url = request.nextUrl.clone();
+        url.searchParams.delete('tokenRefreshed');
+        return NextResponse.redirect(url);
+    }
+
+    const tokenRefreshResult = await getNewAccessToken();
+
+    // If token was refreshed, redirect to same page to fetch with new token
+    if (tokenRefreshResult?.tokenRefreshed) {
+        const url = request.nextUrl.clone();
+        url.searchParams.set('tokenRefreshed', 'true');
+        return NextResponse.redirect(url);
+    }
 
 
     const accessToken = await getCookie('accessToken') || null
@@ -43,6 +62,25 @@ export async function proxy(request: NextRequest) {
         loginUrl.searchParams.set("redirect", pathName)
         return NextResponse.redirect(loginUrl)
     }
+
+
+    // if (accessToken) {
+    //     const userInfo = await getUserInfo();
+    //     if (userInfo.needPasswordChange) {
+    //         if (pathName !== "/reset-password") {
+    //             const resetPasswordUrl = new URL("/reset-password", request.url);
+    //             resetPasswordUrl.searchParams.set("redirect", pathName);
+    //             return NextResponse.redirect(resetPasswordUrl);
+    //         }
+    //         return NextResponse.next();
+    //     }
+
+    //     if (userInfo && !userInfo.needPasswordChange && pathName === '/reset-password') {
+    //         return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url));
+    //     }
+    // }
+
+
 
     if (routerOwner === "COMMON") {
         return NextResponse.next()

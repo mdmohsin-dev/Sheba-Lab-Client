@@ -29,7 +29,7 @@ export const adminsColumns: Column<IAdmin>[] = [
   },
   {
     header: "Status",
-    accessor: (admin) => <StatusBadgeCell isDeleted={admin.isDeleted} />,
+    accessor: (admin) => <StatusBadgeCell isdeleted={admin.isdeleted} />,
   },
   {
     header: "Joined",
