@@ -19,7 +19,7 @@ export async function createDoctor(_prevState: any, formData: FormData) {
             appointmentFee: Number(formData.get("appointmentFee") as string),
             qualification: formData.get("qualification") as string,
             currentWorkingPlace: formData.get("currentWorkingPlace") as string,
-            designation: formData.get("designation") as string,
+            // designation: formData.get("designation") as string,
             password: formData.get("password") as string,
         }
         if (zodValidator(payload, createDoctorZodSchema).success === false) {

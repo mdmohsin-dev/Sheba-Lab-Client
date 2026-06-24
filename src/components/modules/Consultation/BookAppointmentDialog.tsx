@@ -78,7 +78,7 @@ export default function BookAppointmentDialog({
             {/* Doctor Info */}
             <div className="flex items-center gap-3 p-4 bg-muted rounded-lg">
               <div>
-                <p className="font-medium">{doctor.designation}</p>
+                {/* <p className="font-medium">{doctor.designation}</p> */}
                 <p className="text-sm text-muted-foreground">
                   Consultation Fee: ${doctor.appointmentFee}
                 </p>

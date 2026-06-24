@@ -40,9 +40,9 @@ export default function DoctorCard({ doctor }: DoctorCard) {
                             <CardTitle className="text-lg line-clamp-1">
                                 Dr. {doctor.name}
                             </CardTitle>
-                            <CardDescription className="line-clamp-1">
+                            {/* <CardDescription className="line-clamp-1">
                                 {doctor.designation}
-                            </CardDescription>
+                            </CardDescription> */}
 
                             <div className="flex items-center gap-2 mt-2">
                                 <div className="flex items-center gap-1">

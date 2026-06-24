@@ -13,7 +13,7 @@ export interface IDoctor {
     appointmentFee: number;
     qualification: string;
     currentWorkingPlace: string;
-    designation: string;
+    // designation: string;
     specialties?: string[];
     profilePhoto?: File | string;
     removeSpecialties?: string[];
