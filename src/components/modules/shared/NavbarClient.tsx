@@ -7,6 +7,7 @@ import { Menu, X, Moon, Sun } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import LogoutButton from './LogoutButton'
+import AISearchDialog from './AISSearchDialog'
 
 type NavLink = { name: string; path: string }
 
@@ -44,7 +45,7 @@ const NavClient = ({ navLinks, isLoggedIn, children }: Props) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
 
-                    {/* Logo (Server থেকে আসছে) */}
+
                     <div className="flex-shrink-0">{children}</div>
 
                     {/* Desktop Nav */}
@@ -78,13 +79,14 @@ const NavClient = ({ navLinks, isLoggedIn, children }: Props) => {
 
                         {isLoggedIn ? (
                             <LogoutButton />
+
                         ) : (
                             <Button asChild>
                                 <Link href="/login">Login</Link>
                             </Button>
                         )}
+                        <AISearchDialog />
                     </div>
-
                     {/* Mobile Menu Button */}
                     <div className="flex md:hidden items-center gap-2">
                         <Button
