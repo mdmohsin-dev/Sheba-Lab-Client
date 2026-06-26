@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import BookScheduleDialog from "./BookScheduleDialog";
-import ManagementPageHeader from "../shared/ManagementPageHeader";
+import ManagementPageHeader from "../../shared/ManagementPageHeader";
 
 interface MySchedulesHeaderProps {
   availableSchedules: any[];

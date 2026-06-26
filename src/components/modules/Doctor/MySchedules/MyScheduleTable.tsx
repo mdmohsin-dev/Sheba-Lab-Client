@@ -5,9 +5,9 @@ import { IDoctorSchedule } from "@/types/schedule.interface";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import DeleteConfirmationDialog from "../shared/DeleteConfirmationDialog";
-import ManagementTable from "../shared/ManagementTable";
 import { myScheduleColumns } from "./MyScheduleColumns";
+import ManagementTable from "../../shared/ManagementTable";
+import DeleteConfirmationDialog from "../../shared/DeleteConfirmationDialog";
 
 interface MySchedulesTableProps {
   schedules: IDoctorSchedule[];

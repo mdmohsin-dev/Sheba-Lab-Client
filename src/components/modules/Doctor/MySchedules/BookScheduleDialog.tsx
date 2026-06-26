@@ -83,8 +83,7 @@ export default function BookScheduleDialog({
       setIsLoading(true);
       await createDoctorSchedule(selectedSchedules);
       toast.success(
-        `Successfully booked ${selectedSchedules.length} schedule${
-          selectedSchedules.length > 1 ? "s" : ""
+        `Successfully booked ${selectedSchedules.length} schedule${selectedSchedules.length > 1 ? "s" : ""
         }`
       );
       if (onSuccess) {

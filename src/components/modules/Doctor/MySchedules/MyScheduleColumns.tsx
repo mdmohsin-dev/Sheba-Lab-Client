@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { IDoctorSchedule } from "@/types/schedule.interface";
 import { format, isBefore, startOfDay } from "date-fns";
-import { Column } from "../shared/ManagementTable";
+import { Column } from "../../shared/ManagementTable";
 
 const isPastSchedule = (schedule: IDoctorSchedule) => {
   return isBefore(
